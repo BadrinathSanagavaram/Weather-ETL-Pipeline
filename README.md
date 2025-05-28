@@ -1,45 +1,94 @@
-Overview
-========
+# Weather ETL Pipeline
 
-Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
+**Author:** Badrinath Sanagavaram  
+**Technologies:** Apache Airflow, PostgreSQL, Astro CLI, Docker, Python, Open-Meteo API, DBeaver
 
-Project Contents
-================
+## 📌 Project Overview
 
-Your Astro project contains the following files and folders:
+This project automates the extraction of real-time weather data from the Open-Meteo API, transforms it into a structured format, and loads it into a PostgreSQL database using Apache Airflow. The goal is to demonstrate a real-world ETL pipeline in a containerized environment.
 
-- dags: This folder contains the Python files for your Airflow DAGs. By default, this directory includes one example DAG:
-    - `example_astronauts`: This DAG shows a simple ETL pipeline example that queries the list of astronauts currently in space from the Open Notify API and prints a statement for each astronaut. The DAG uses the TaskFlow API to define tasks in Python, and dynamic task mapping to dynamically print a statement for each astronaut. For more on how this DAG works, see our [Getting started tutorial](https://www.astronomer.io/docs/learn/get-started-with-airflow).
-- Dockerfile: This file contains a versioned Astro Runtime Docker image that provides a differentiated Airflow experience. If you want to execute other commands or overrides at runtime, specify them here.
-- include: This folder contains any additional files that you want to include as part of your project. It is empty by default.
-- packages.txt: Install OS-level packages needed for your project by adding them to this file. It is empty by default.
-- requirements.txt: Install Python packages needed for your project by adding them to this file. It is empty by default.
-- plugins: Add custom or community plugins for your project to this file. It is empty by default.
-- airflow_settings.yaml: Use this local-only file to specify Airflow Connections, Variables, and Pools instead of entering them in the Airflow UI as you develop DAGs in this project.
+---
 
-Deploy Your Project Locally
-===========================
+## 🔧 Tools and Setup
 
-Start Airflow on your local machine by running 'astro dev start'.
+- **Docker & Docker Compose**: To run PostgreSQL in an isolated container.
+- **Astro CLI**: For managing and deploying the Airflow environment locally.
+- **Apache Airflow**: For orchestrating and scheduling the ETL tasks.
+- **PostgreSQL**: The target database to store transformed weather data.
+- **DBeaver**: To connect to the Postgres container and validate the data.
 
-This command will spin up five Docker containers on your machine, each for a different Airflow component:
+---
 
-- Postgres: Airflow's Metadata Database
-- Scheduler: The Airflow component responsible for monitoring and triggering tasks
-- DAG Processor: The Airflow component responsible for parsing DAGs
-- API Server: The Airflow component responsible for serving the Airflow UI and API
-- Triggerer: The Airflow component responsible for triggering deferred tasks
+## 🧱 DAG Workflow Structure
 
-When all five containers are ready the command will open the browser to the Airflow UI at http://localhost:8080/. You should also be able to access your Postgres Database at 'localhost:5432/postgres' with username 'postgres' and password 'postgres'.
+The Airflow DAG, named `weather_etl_pipeline`, runs daily and consists of three core tasks:
 
-Note: If you already have either of the above ports allocated, you can either [stop your existing Docker containers or change the port](https://www.astronomer.io/docs/astro/cli/troubleshoot-locally#ports-are-not-available-for-my-local-airflow-webserver).
+1. **Extract**: Uses `HttpHook` to pull data from the Open-Meteo API.
+2. **Transform**: Parses JSON to extract key fields like temperature and windspeed.
+3. **Load**: Inserts data into a PostgreSQL table using `PostgresHook`.
 
-Deploy Your Project to Astronomer
-=================================
+All tasks are defined using Airflow's `@task` decorator.
 
-If you have an Astronomer account, pushing code to a Deployment on Astronomer is simple. For deploying instructions, refer to Astronomer documentation: https://www.astronomer.io/docs/astro/deploy-code/
+---
 
-Contact
-=======
+## 📈 Process Flowchart
 
-The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support.
+```mermaid
+graph TD
+    A[Start DAG] --> B[Extract Weather Data from API]
+    B --> C[Transform JSON Response]
+    C --> D[Create/Insert into PostgreSQL Table]
+    D --> E[Validate using DBeaver]
+    E --> F[Success]
+
+## 🗃️ Database Design
+
+**Table:** `weather_data`  
+
+**Fields:**
+- `latitude` (FLOAT)  
+- `longitude` (FLOAT)  
+- `temperature` (FLOAT)  
+- `windspeed` (FLOAT)  
+- `winddirection` (FLOAT)  
+- `weathercode` (INT)  
+- `timestamp` (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)  
+
+---
+
+## ✅ Validation
+
+Validation was done using DBeaver by connecting to the Postgres container via:
+
+- **Host:** localhost  
+- **Port:** 5432  
+- **User:** postgres  
+- **Password:** postgres  
+
+A SQL `SELECT * FROM weather_data;` confirmed correct data ingestion and schema structure.
+
+---
+
+## 📌 Key Takeaways
+
+- Hands-on experience with Airflow DAGs, hooks, and task orchestration.  
+- Real-time API integration with Open-Meteo.  
+- Containerized database interaction.  
+- SQL-based validation and data auditing with DBeaver.  
+
+---
+
+## 🚀 Future Enhancements
+
+- Add alerting in case of API/data failures.  
+- Support multiple geolocations dynamically.  
+- Extend transformations with trend analytics or ML predictions.  
+
+---
+
+## 📁 File Structure
+
+- `ETL-Weather.py` – Contains the DAG and ETL logic.  
+- `docker-compose.yml` – Defines the Postgres container.  
+- `requirements.txt` – Includes Airflow provider dependencies.  
+- `airflow_settings.yaml` – Optional connection/variable definitions.  
