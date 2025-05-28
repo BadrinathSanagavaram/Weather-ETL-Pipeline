@@ -95,4 +95,9 @@ A SQL `SELECT * FROM weather_data;` confirmed correct data ingestion and schema 
 # Output samples:
 
 ![Screenshot 2025-05-27 at 2 41 51 AM](https://github.com/user-attachments/assets/e9f646cd-06e3-4941-9c99-88b144313356)
+![Screenshot 2025-05-27 at 2 42 22 AM](https://github.com/user-attachments/assets/d341edc0-793a-4fd5-82ba-cdff9b132621)
+![Screenshot 2025-05-27 at 2 42 51 AM](https://github.com/user-attachments/assets/3e555016-e10c-4c6f-bd19-cb917aae8afc)
+![SQL+SCRIPT_TEST](https://github.com/user-attachments/assets/f10b4749-9e32-4fa7-becf-ff7e82bdfcb8)
+
+
 
