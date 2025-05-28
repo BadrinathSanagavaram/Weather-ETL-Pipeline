@@ -90,4 +90,9 @@ A SQL `SELECT * FROM weather_data;` confirmed correct data ingestion and schema 
 - `ETL-Weather.py` – Contains the DAG and ETL logic.  
 - `docker-compose.yml` – Defines the Postgres container.  
 - `requirements.txt` – Includes Airflow provider dependencies.  
-- `airflow_settings.yaml` – Optional connection/variable definitions.  
+- `airflow_settings.yaml` – Optional connection/variable definitions.
+
+# Output samples:
+
+![Screenshot 2025-05-27 at 2 41 51 AM](https://github.com/user-attachments/assets/e9f646cd-06e3-4941-9c99-88b144313356)
+
