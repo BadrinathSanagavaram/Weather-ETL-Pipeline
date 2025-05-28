@@ -33,7 +33,6 @@ All tasks are defined using Airflow's `@task` decorator.
 
 ## 📈 Process Flowchart
 
-```mermaid
 graph TD
     A[Start DAG] --> B[Extract Weather Data from API]
     B --> C[Transform JSON Response]
